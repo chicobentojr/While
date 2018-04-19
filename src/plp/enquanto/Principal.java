@@ -29,7 +29,8 @@ public class Principal {
 	}
 
 	public static void main(String... args) throws IOException {
-		String arq = args[0];
+		//String arq = args[0];
+		String arq = "prog1.while";
 		final ParseTree tree = parse(arq);
 		final ParseTreeWalker walker = new ParseTreeWalker();
 		final MeuListener listener = new MeuListener();

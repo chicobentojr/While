@@ -1,1 +1,35 @@
-exiba "ok. Funciona"; escreva 10
+exiba " ";
+escreva 2 ^ 5;
+
+
+
+
+
+se verdadeiro xor verdadeiro entao
+  exiba "true"
+senao
+  exiba "false"
+;
+
+
+a := 1;
+
+
+escreva a;
+
+escolha a
+	caso 1 : exiba "um"; exiba "dá pra mostrar"; exiba "funciona em cadeia"
+	caso 10 : exiba "oito"
+	outro : exiba "funcionou"
+
+fimescolha
+;
+
+para b de 1 ate 10 passo 1 faca
+  escreva b
+  
+fimpara;
+escreva b;
+escreva a
+
+	

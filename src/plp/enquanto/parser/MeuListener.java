@@ -7,6 +7,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import plp.enquanto.linguagem.Linguagem.*;
+import plp.enquanto.parser.EnquantoParser.EscolhaContext;
+import plp.enquanto.parser.EnquantoParser.LacoContext;
+import plp.enquanto.parser.EnquantoParser.OuLogicoContext;
+import plp.enquanto.parser.EnquantoParser.XorLogicoContext;
 
 public class MeuListener extends EnquantoBaseListener {
 	private final Leia leia = new Leia();
@@ -96,6 +100,34 @@ public class MeuListener extends EnquantoBaseListener {
 		final List<Comando> cmds = (List<Comando>) getValue(ctx.seqComando());
 		setValue(ctx, new Bloco(cmds));
 	}
+	
+	@Override
+	public void exitLaco(LacoContext ctx) {
+		@SuppressWarnings("unchecked")
+		final String id = ctx.ID().getText();
+		final Expressao de = (Expressao) getValue(ctx.expressao(0));
+		final Expressao ate = (Expressao) getValue(ctx.expressao(1));
+		final Expressao passo = (Expressao) getValue(ctx.expressao(2));
+		final List<Comando> cmds = (List<Comando>) getValue(ctx.seqComando());
+		
+		setValue(ctx, new Laco(id, de, ate, passo, cmds));
+	}
+	
+	@Override
+	public void exitEscolha(EscolhaContext ctx) {
+		final String id = ctx.ID().getText();
+		List<Expressao> casos = new ArrayList<Expressao>();
+		List<List<Comando>> listaComandos = new ArrayList<List<Comando>>();
+		
+		for	(EnquantoParser.ExpressaoContext exctx : ctx.expressao()) {
+			casos.add((Expressao) getValue(exctx)); 
+		}
+		
+		for	(EnquantoParser.SeqComandoContext comctx : ctx.seqComando()) {
+			listaComandos.add((List<Comando>) getValue(comctx)); 
+		}
+		setValue(ctx, new Escolha(id, casos, listaComandos)); 
+	}
 
 	@Override
 	public void exitOpBin(final EnquantoParser.OpBinContext ctx) {
@@ -112,6 +144,12 @@ public class MeuListener extends EnquantoBaseListener {
 			break;
 		case "-":
 			exp = new ExpSub(esq, dir);
+			break;
+		case "/":
+			exp = new ExpDiv(esq, dir);
+			break;
+		case "^":
+			exp = new ExpPot(esq, dir);
 			break;
 		default:
 			exp = new ExpSoma(esq, dir);
@@ -131,6 +169,20 @@ public class MeuListener extends EnquantoBaseListener {
 		final Bool esq = (Bool) getValue(ctx.bool(0));
 		final Bool dir = (Bool) getValue(ctx.bool(1));
 		setValue(ctx, new ELogico(esq, dir));
+	}
+	
+	@Override
+	public void exitOuLogico(OuLogicoContext ctx) {
+		final Bool esq = (Bool) getValue(ctx.bool(0));
+		final Bool dir = (Bool) getValue(ctx.bool(1));
+		setValue(ctx, new OuLogico(esq, dir));
+	}
+	
+	@Override
+	public void exitXorLogico(XorLogicoContext ctx) {
+		final Bool esq = (Bool) getValue(ctx.bool(0));
+		final Bool dir = (Bool) getValue(ctx.bool(1));
+		setValue(ctx, new XorLogico(esq, dir));
 	}
 
 	@Override
@@ -168,6 +220,12 @@ public class MeuListener extends EnquantoBaseListener {
 			break;
 		case "<=":
 			exp = new ExpMenorIgual(esq, dir);
+			break;
+		case ">=":
+			exp = new ExpMaiorIgual(esq, dir);
+			break;
+		case "<>":
+			exp = new ExpDiferente(esq, dir);
 			break;
 		default:
 			exp = new ExpIgual(esq, dir);

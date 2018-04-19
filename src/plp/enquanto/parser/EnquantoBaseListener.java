@@ -1,4 +1,4 @@
-// Generated from Enquanto.g4 by ANTLR 4.7
+// Generated from Enquanto.g4 by ANTLR 4.7.1
 package plp.enquanto.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -124,6 +124,30 @@ public class EnquantoBaseListener implements EnquantoListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLaco(EnquantoParser.LacoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLaco(EnquantoParser.LacoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEscolha(EnquantoParser.EscolhaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEscolha(EnquantoParser.EscolhaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLeia(EnquantoParser.LeiaContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -208,6 +232,18 @@ public class EnquantoBaseListener implements EnquantoListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterXorLogico(EnquantoParser.XorLogicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitXorLogico(EnquantoParser.XorLogicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNaoLogico(EnquantoParser.NaoLogicoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,6 +275,18 @@ public class EnquantoBaseListener implements EnquantoListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolPar(EnquantoParser.BoolParContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOuLogico(EnquantoParser.OuLogicoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOuLogico(EnquantoParser.OuLogicoContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

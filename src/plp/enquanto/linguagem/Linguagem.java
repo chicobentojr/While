@@ -99,7 +99,7 @@ public interface Linguagem {
 			}
 		}
 	}
-
+	
 	class Exiba implements Comando {
 		public Exiba(String texto) {
 			this.texto = texto;
@@ -140,6 +140,72 @@ public interface Linguagem {
 		@Override
 		public void execute() {
 			ambiente.put(id, exp.getValor());
+		}
+	}
+	
+	class Laco implements Comando {
+		private String id;
+		private Expressao de;
+		private Expressao ate;
+		private Expressao passo;
+		private List<Comando> comandos;
+
+		public Laco(String id, Expressao de, Expressao ate, Expressao passo, List<Comando> comandos) {
+			this.id = id;
+			this.de = de;
+			this.ate = ate;
+			this.passo = passo;
+			this.comandos = comandos;
+		}
+
+		@Override
+		public void execute() {
+			int de = this.de.getValor();
+			int ate = this.ate.getValor();
+			int passo = this.passo.getValor();
+			for (int i = de; i < ate; i += passo ) {
+				for (Comando comando : comandos) {
+					comando.execute();
+				}
+				ambiente.put(this.id,  i);
+			}
+		}
+	}
+	
+	class Escolha implements Comando {
+		private String id;
+		private List<Expressao> casos;
+		private List<List<Comando>> comandos;
+
+		public Escolha(String id, List<Expressao> casos, List<List<Comando>> comandos) {
+			this.id = id;
+			this.casos = casos;
+			this.comandos = comandos;
+		}
+
+		@Override
+		public void execute() {
+			int valor = ambiente.get(this.id);
+			int escolhido = 0;
+			boolean executou = false;
+			
+			
+			for (Expressao caso : this.casos) {
+				if (valor == caso.getValor()) {
+					List<Comando> cmds = this.comandos.get(escolhido);
+					for (Comando cmd : cmds) {
+						cmd.execute();
+					}
+					executou = true;
+					return;
+				}
+				escolhido++;
+			}
+			
+			List<Comando> cmds = this.comandos.get(this.comandos.size() - 1);
+			for (Comando cmd : cmds) {
+				cmd.execute();
+			}
 		}
 	}
 
@@ -216,6 +282,30 @@ public interface Linguagem {
 			return esq.getValor() * dir.getValor();
 		}
 	}
+	
+	class ExpDiv extends ExpBin {
+		public ExpDiv(Expressao esq, Expressao dir) {
+			super(esq, dir);
+		}
+
+		@Override
+		public int getValor() {
+			return esq.getValor() / dir.getValor();
+		}
+	}
+	
+	class ExpPot extends ExpBin {
+		public ExpPot(Expressao esq, Expressao dir) {
+			super(esq, dir);
+		}
+
+		@Override
+		public int getValor() {
+			double a = (double) esq.getValor();
+			double b = (double) dir.getValor();
+			return (int) Math.pow(a,b);
+		}
+	}
 
 	class Booleano implements Bool {
 		private boolean valor;
@@ -263,6 +353,28 @@ public interface Linguagem {
 			return esq.getValor() <= dir.getValor();
 		}
 	}
+	
+	public class ExpMaiorIgual extends ExpRel {
+		public ExpMaiorIgual(Expressao esq, Expressao dir) {
+			super(esq, dir);
+		}
+
+		@Override
+		public boolean getValor() {
+			return esq.getValor() >= dir.getValor();
+		}
+	}
+	
+	public class ExpDiferente extends ExpRel {
+		public ExpDiferente(Expressao esq, Expressao dir) {
+			super(esq, dir);
+		}
+
+		@Override
+		public boolean getValor() {
+			return esq.getValor() != dir.getValor();
+		}
+	}
 
 	public class NaoLogico implements Bool {
 		private Bool b;
@@ -289,6 +401,37 @@ public interface Linguagem {
 		@Override
 		public boolean getValor() {
 			return esq.getValor() && dir.getValor();
+		}
+	}
+	
+	public class OuLogico implements Bool {
+		private Bool esq;
+		private Bool dir;
+
+		public OuLogico(Bool esq, Bool dir) {
+			this.esq = esq;
+			this.dir = dir;
+		}
+
+		@Override
+		public boolean getValor() {
+			return esq.getValor() || dir.getValor();
+		}
+	}
+	
+	public class XorLogico implements Bool {
+		private Bool esq;
+		private Bool dir;
+
+		public XorLogico(Bool esq, Bool dir) {
+			this.esq = esq;
+			this.dir = dir;
+		}
+
+		@Override
+		public boolean getValor() {
+			return (esq.getValor() && !dir.getValor()) || 
+				   (!esq.getValor() && dir.getValor());
 		}
 	}
 }
